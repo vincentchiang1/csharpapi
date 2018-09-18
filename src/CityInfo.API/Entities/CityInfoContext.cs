@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CityInfo.API.Entities
 {
-    public class CityInfoContext : DbContext
+    public class CityInfoContext : DbContext, ICityInfoContext
     {
         public CityInfoContext(DbContextOptions<CityInfoContext> options)
            : base(options)
@@ -19,8 +19,8 @@ namespace CityInfo.API.Entities
 
         }
 
-        public virtual DbSet<City> Cities { get; set; }
-        public virtual DbSet<PointOfInterest> PointsOfInterest { get; set; }
+       public DbSet<City> Cities { get; set; }
+       public DbSet<PointOfInterest> PointsOfInterest { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

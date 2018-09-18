@@ -55,7 +55,7 @@ namespace CityInfoUnitTests
             mock.As<IQueryable<PointOfInterest>>().Setup(m => m.ElementType).Returns(points.ElementType);
         }
 
-        // Helper function for mock database of cities and points of interest
+        // Helper function for mock context set up
         private Mock<CityInfoContext> MockSetup(IQueryable<City> cities, IQueryable<PointOfInterest> points)
         {
             var mockSet = new Mock<DbSet<City>>();
