@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using Moq;
-using CityInfo.API.Entities;
-using Microsoft.EntityFrameworkCore;
-using CityInfo.API.Services;
+﻿using System.Collections.Generic;
 using System.Linq;
+using CityInfo.API.Entities;
+using CityInfo.API.Services;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using Xunit;
 
 namespace CityInfoUnitTests
 {
@@ -14,11 +12,9 @@ namespace CityInfoUnitTests
     {
         [Fact]
         // No data, thus no id match
-        public void TestEmptyGetCityId()
+        public void TestGetCityNoCities()
         {
-            var cities = new List<City>
-            {
-            }.AsQueryable();
+            var cities = new List<City>{ }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
             mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
@@ -31,20 +27,17 @@ namespace CityInfoUnitTests
             var repo = new CityInfoRepository(mockContext.Object);
 
             Assert.Null(repo.GetCity(3, false));
-
-
         }
 
         [Fact]
         // Data, no id match
-        public void TestGetWrongId()
+        public void TestGetCityWrongId()
         {
             PointOfInterest poi1 = new PointOfInterest
             {
                 Id = 1,
                 Name = "Downtown",
                 Description = "Lots of food"
-
             };
 
             PointOfInterest poi2 = new PointOfInterest
@@ -52,7 +45,6 @@ namespace CityInfoUnitTests
                 Id = 2,
                 Name = "Stanley Park",
                 Description = "Lots to do"
-
             };
 
             PointOfInterest poi3 = new PointOfInterest
@@ -60,7 +52,6 @@ namespace CityInfoUnitTests
                 Id = 3,
                 Name = "Science World",
                 Description = "Lots of science"
-
             };
             
             PointOfInterest poi4 = new PointOfInterest
@@ -68,12 +59,12 @@ namespace CityInfoUnitTests
                 Id = 3,
                 Name = "UBC",
                 Description = "School"
-
             };
+
             var cities = new List<City>
             {
-                new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = {poi1,poi2} },
-                new City{ Id = 2, Name = "Vancouver", Description = "Big", PointsOfInterest = {poi3,poi4} },
+                new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = { poi1, poi2 } },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big", PointsOfInterest = { poi3, poi4 } },
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
@@ -91,15 +82,14 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        //Data with POI(include = false)
-        public void TestGetIdIncludeFalse()
+        // Data with POI(include = false)
+        public void TestGetCityIncludeFalse()
         {
             PointOfInterest poi1 = new PointOfInterest
             {
                 Id = 1,
                 Name = "Downtown",
                 Description = "Lots of food"
-
             };
 
             PointOfInterest poi2 = new PointOfInterest
@@ -107,7 +97,6 @@ namespace CityInfoUnitTests
                 Id = 2,
                 Name = "Stanley Park",
                 Description = "Lots to do"
-
             };
 
             PointOfInterest poi3 = new PointOfInterest
@@ -115,7 +104,6 @@ namespace CityInfoUnitTests
                 Id = 3,
                 Name = "Science World",
                 Description = "Lots of science"
-
             };
 
             PointOfInterest poi4 = new PointOfInterest
@@ -123,12 +111,12 @@ namespace CityInfoUnitTests
                 Id = 3,
                 Name = "UBC",
                 Description = "School"
-
             };
+
             var cities = new List<City>
             {
-                new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = {poi1,poi2} },
-                new City{ Id = 2, Name = "Vancouver", Description = "Big", PointsOfInterest = {poi3,poi4} },
+                new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = { poi1, poi2 } },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big", PointsOfInterest = { poi3, poi4 } },
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
@@ -141,24 +129,23 @@ namespace CityInfoUnitTests
 
             var repo = new CityInfoRepository(mockContext.Object);
 
-            Assert.Equal(1,repo.GetCity(1, false).Id);
+            Assert.Equal(1, repo.GetCity(1, false).Id);
             Assert.Equal("Richmond", repo.GetCity(1, false).Name);
             Assert.Equal("Small", repo.GetCity(1, false).Description);
-            Assert.Equal(2, repo.GetCity(1, false).PointsOfInterest.Count); // ?
-            Assert.True(repo.GetCity(1, false).PointsOfInterest.Contains(poi1)); // ?
-            Assert.True(repo.GetCity(1, false).PointsOfInterest.Contains(poi2)); // ?
+            Assert.Equal(2, repo.GetCity(1, false).PointsOfInterest.Count); 
+            Assert.True(repo.GetCity(1, false).PointsOfInterest.Contains(poi1)); 
+            Assert.True(repo.GetCity(1, false).PointsOfInterest.Contains(poi2)); 
         }
 
         [Fact]
         // Data with POI (include = true)
-        public void TestGetIdIncludeTrue()
+        public void TestGetCityIncludeTrue()
         {
             PointOfInterest poi1 = new PointOfInterest
             {
                 Id = 1,
                 Name = "Downtown",
                 Description = "Lots of food"
-
             };
 
             PointOfInterest poi2 = new PointOfInterest
@@ -166,7 +153,6 @@ namespace CityInfoUnitTests
                 Id = 2,
                 Name = "Stanley Park",
                 Description = "Lots to do"
-
             };
 
             PointOfInterest poi3 = new PointOfInterest
@@ -174,7 +160,6 @@ namespace CityInfoUnitTests
                 Id = 3,
                 Name = "Science World",
                 Description = "Lots of science"
-
             };
 
             PointOfInterest poi4 = new PointOfInterest
@@ -182,12 +167,12 @@ namespace CityInfoUnitTests
                 Id = 3,
                 Name = "UBC",
                 Description = "School"
-
             };
+
             var cities = new List<City>
             {
-                new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = {poi1,poi2} },
-                new City{ Id = 2, Name = "Vancouver", Description = "Big", PointsOfInterest = {poi3,poi4} },
+                new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = { poi1, poi2 } },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big", PointsOfInterest = { poi3, poi4 } },
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
@@ -203,17 +188,17 @@ namespace CityInfoUnitTests
             Assert.Equal(1, repo.GetCity(1, true).Id);
             Assert.Equal("Richmond", repo.GetCity(1, true).Name);
             Assert.Equal("Small", repo.GetCity(1, true).Description);
-            Assert.Equal(2, repo.GetCity(1, true).PointsOfInterest.Count); // ?
-            Assert.True(repo.GetCity(1, true).PointsOfInterest.Contains(poi1)); // ?
-            Assert.True(repo.GetCity(1, true).PointsOfInterest.Contains(poi2)); // ?
+            Assert.Equal(2, repo.GetCity(1, true).PointsOfInterest.Count); 
+            Assert.True(repo.GetCity(1, true).PointsOfInterest.Contains(poi1)); 
+            Assert.True(repo.GetCity(1, true).PointsOfInterest.Contains(poi2)); 
         }
         [Fact]
         // No cities, thus no point of interest
         public void TestGetPointNoCities()
         {
-            var cities = new List<City>{}.AsQueryable();
+            var cities = new List<City>{ }.AsQueryable();
 
-            var points = new List<PointOfInterest> {}.AsQueryable();
+            var points = new List<PointOfInterest> { }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
             mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
@@ -232,7 +217,6 @@ namespace CityInfoUnitTests
             var repo = new CityInfoRepository(mockContext.Object);
 
             Assert.Null(repo.GetPointOfInterestForCity(1, 1));
-
         }
 
         [Fact]
@@ -245,7 +229,6 @@ namespace CityInfoUnitTests
                 Name = "Downtown",
                 Description = "Lots of food",
                 CityId = 1
-
             };
 
             PointOfInterest poi2 = new PointOfInterest
@@ -254,7 +237,6 @@ namespace CityInfoUnitTests
                 Name = "Stanley Park",
                 Description = "Lots to do",
                 CityId = 1
-
             };
 
             PointOfInterest poi3 = new PointOfInterest
@@ -263,7 +245,6 @@ namespace CityInfoUnitTests
                 Name = "Science World",
                 Description = "Lots of science",
                 CityId = 2
-
             };
 
             PointOfInterest poi4 = new PointOfInterest
@@ -272,7 +253,6 @@ namespace CityInfoUnitTests
                 Name = "UBC",
                 Description = "School",
                 CityId = 2
-
             };
 
             var cities = new List<City>
@@ -312,7 +292,7 @@ namespace CityInfoUnitTests
                 new City{ Id = 2, Name = "Vancouver", Description = "Big" }
             }.AsQueryable();
 
-            var points = new List<PointOfInterest> {}.AsQueryable();
+            var points = new List<PointOfInterest> { }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
             mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
@@ -343,7 +323,6 @@ namespace CityInfoUnitTests
                 Name = "Downtown",
                 Description = "Lots of food",
                 CityId = 1
-
             };
 
             PointOfInterest poi2 = new PointOfInterest
@@ -352,7 +331,6 @@ namespace CityInfoUnitTests
                 Name = "Stanley Park",
                 Description = "Lots to do",
                 CityId = 1
-
             };
 
             PointOfInterest poi3 = new PointOfInterest
@@ -361,7 +339,6 @@ namespace CityInfoUnitTests
                 Name = "Science World",
                 Description = "Lots of science",
                 CityId = 2
-
             };
 
             PointOfInterest poi4 = new PointOfInterest
@@ -370,7 +347,6 @@ namespace CityInfoUnitTests
                 Name = "UBC",
                 Description = "School",
                 CityId = 2
-
             };
 
             var cities = new List<City>
@@ -399,9 +375,10 @@ namespace CityInfoUnitTests
 
             Assert.Null(repo.GetPointOfInterestForCity(1, 3));
         }
+
         [Fact]
-        // cities with existing city id, correct poi id
-        public void TestGetPointId()
+        // Cities with existing city id, correct poi id
+        public void TestGetPoint()
         {
             PointOfInterest poi1 = new PointOfInterest
             {
@@ -409,16 +386,14 @@ namespace CityInfoUnitTests
                 Name = "Downtown",
                 Description = "Lots of food",
                 CityId = 1
-
             };
 
-        PointOfInterest poi2 = new PointOfInterest
-        {
-            Id = 2,
-            Name = "Stanley Park",
-            Description = "Lots to do",
-            CityId = 1
-
+            PointOfInterest poi2 = new PointOfInterest
+            {
+                Id = 2,
+                Name = "Stanley Park",
+                Description = "Lots to do",
+                CityId = 1
             };
 
             PointOfInterest poi3 = new PointOfInterest
@@ -427,7 +402,6 @@ namespace CityInfoUnitTests
                 Name = "Science World",
                 Description = "Lots of science",
                 CityId = 2
-
             };
 
             PointOfInterest poi4 = new PointOfInterest
@@ -436,7 +410,6 @@ namespace CityInfoUnitTests
                 Name = "UBC",
                 Description = "School",
                 CityId = 2
-
             };
 
             var cities = new List<City>
@@ -445,7 +418,7 @@ namespace CityInfoUnitTests
                 new City{ Id = 2, Name = "Vancouver", Description = "Big" }
             }.AsQueryable();
 
-            var points = new List<PointOfInterest> {poi1,poi2,poi3,poi4}.AsQueryable();
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
             mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
@@ -463,7 +436,7 @@ namespace CityInfoUnitTests
 
             var repo = new CityInfoRepository(mockContext.Object);
 
-            Assert.Equal(2,repo.GetPointOfInterestForCity(1, 2).Id);
+            Assert.Equal(2, repo.GetPointOfInterestForCity(1, 2).Id);
             Assert.Equal("Stanley Park", repo.GetPointOfInterestForCity(1, 2).Name);
             Assert.Equal("Lots to do", repo.GetPointOfInterestForCity(1, 2).Description);
             Assert.Equal(1, repo.GetPointOfInterestForCity(1, 2).CityId);
@@ -581,7 +554,6 @@ namespace CityInfoUnitTests
             Assert.Equal(2, cities2.Last().Id);
             Assert.Equal("Vancouver", cities2.Last().Name);
             Assert.Equal("Big", cities2.Last().Description);
-           
         }
     }
 }

@@ -16,7 +16,6 @@ namespace CityInfoUnitTests
                 Id = 1,
                 Name = "Vancouver",
                 Description = "Home"
-
             };
 
             Assert.Equal(0, city1.PointsOfInterest.Count);
@@ -31,7 +30,6 @@ namespace CityInfoUnitTests
                 Id = 1,
                 Name = "Downtown",
                 Description = "Lots of food"
-
             };
 
             PointOfInterestDto poi2 = new PointOfInterestDto
@@ -39,7 +37,6 @@ namespace CityInfoUnitTests
                 Id = 2,
                 Name = "Stanley Park",
                 Description = "Lots to do"
-
             };
 
             PointOfInterestDto poi3 = new PointOfInterestDto
@@ -47,7 +44,6 @@ namespace CityInfoUnitTests
                 Id = 3,
                 Name = "Science World",
                 Description = "Lots of science"
-
             };
 
             CityDto city2 = new CityDto
@@ -55,7 +51,7 @@ namespace CityInfoUnitTests
                 Id = 2,
                 Name = "Van",
                 Description = "City of Vancouver",
-                PointsOfInterest = {poi1,poi2,poi3 }
+                PointsOfInterest = { poi1,poi2,poi3 }
             };
 
             Assert.Equal(3, city2.PointsOfInterest.Count);

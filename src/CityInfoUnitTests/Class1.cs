@@ -93,7 +93,5 @@ namespace CityInfoUnitTests
         //    Assert.Equal(3, city1.PointsOfInterest.Count);
 
         //}
-
-
     }
 }
