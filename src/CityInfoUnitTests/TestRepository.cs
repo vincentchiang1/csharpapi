@@ -10,6 +10,51 @@ namespace CityInfoUnitTests
 {
     public class TestRepository
     {
+        readonly PointOfInterest poi1 = new PointOfInterest
+        {
+            Id = 1,
+            Name = "Downtown",
+            Description = "Lots of food",
+            CityId = 1
+        };
+        readonly PointOfInterest poi2 = new PointOfInterest
+        {
+            Id = 2,
+            Name = "Stanley Park",
+            Description = "Lots to do",
+            CityId = 1
+        };
+        readonly PointOfInterest poi3 = new PointOfInterest
+        {
+            Id = 3,
+            Name = "Science World",
+            Description = "Lots of science",
+            CityId = 2
+        };
+        readonly PointOfInterest poi4 = new PointOfInterest
+        {
+            Id = 4,
+            Name = "UBC",
+            Description = "School",
+            CityId = 2
+        };
+
+        // Helper function for mock database of cities
+        private void MockSetupCity(Mock<DbSet<City>> mock, IQueryable<City> cities)
+        {
+            mock.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
+            mock.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
+            mock.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+        }
+
+        // Helper function for mock database of points of interest
+        private void MockSetupPoint(Mock<DbSet<PointOfInterest>> mock, IQueryable<PointOfInterest> points)
+        {
+            mock.As<IQueryable<PointOfInterest>>().Setup(m => m.Provider).Returns(points.Provider);
+            mock.As<IQueryable<PointOfInterest>>().Setup(m => m.Expression).Returns(points.Expression);
+            mock.As<IQueryable<PointOfInterest>>().Setup(m => m.ElementType).Returns(points.ElementType);
+        }
+
         [Fact]
         // No data, thus no id match
         public void TestGetCityNoCities()
@@ -17,9 +62,7 @@ namespace CityInfoUnitTests
             var cities = new List<City>{ }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
             
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -33,34 +76,6 @@ namespace CityInfoUnitTests
         // Data, no id match
         public void TestGetCityWrongId()
         {
-            PointOfInterest poi1 = new PointOfInterest
-            {
-                Id = 1,
-                Name = "Downtown",
-                Description = "Lots of food"
-            };
-
-            PointOfInterest poi2 = new PointOfInterest
-            {
-                Id = 2,
-                Name = "Stanley Park",
-                Description = "Lots to do"
-            };
-
-            PointOfInterest poi3 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "Science World",
-                Description = "Lots of science"
-            };
-            
-            PointOfInterest poi4 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "UBC",
-                Description = "School"
-            };
-
             var cities = new List<City>
             {
                 new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = { poi1, poi2 } },
@@ -68,9 +83,7 @@ namespace CityInfoUnitTests
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -78,51 +91,20 @@ namespace CityInfoUnitTests
             var repo = new CityInfoRepository(mockContext.Object);
 
             Assert.Null(repo.GetCity(3, false));
-
         }
 
         [Fact]
         // Data with POI(include = false)
         public void TestGetCityIncludeFalse()
         {
-            PointOfInterest poi1 = new PointOfInterest
-            {
-                Id = 1,
-                Name = "Downtown",
-                Description = "Lots of food"
-            };
-
-            PointOfInterest poi2 = new PointOfInterest
-            {
-                Id = 2,
-                Name = "Stanley Park",
-                Description = "Lots to do"
-            };
-
-            PointOfInterest poi3 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "Science World",
-                Description = "Lots of science"
-            };
-
-            PointOfInterest poi4 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "UBC",
-                Description = "School"
-            };
-
-            var cities = new List<City>
+           var cities = new List<City>
             {
                 new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = { poi1, poi2 } },
                 new City{ Id = 2, Name = "Vancouver", Description = "Big", PointsOfInterest = { poi3, poi4 } },
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -141,34 +123,6 @@ namespace CityInfoUnitTests
         // Data with POI (include = true)
         public void TestGetCityIncludeTrue()
         {
-            PointOfInterest poi1 = new PointOfInterest
-            {
-                Id = 1,
-                Name = "Downtown",
-                Description = "Lots of food"
-            };
-
-            PointOfInterest poi2 = new PointOfInterest
-            {
-                Id = 2,
-                Name = "Stanley Park",
-                Description = "Lots to do"
-            };
-
-            PointOfInterest poi3 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "Science World",
-                Description = "Lots of science"
-            };
-
-            PointOfInterest poi4 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "UBC",
-                Description = "School"
-            };
-
             var cities = new List<City>
             {
                 new City{ Id = 1, Name = "Richmond", Description = "Small", PointsOfInterest = { poi1, poi2 } },
@@ -176,9 +130,7 @@ namespace CityInfoUnitTests
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -192,6 +144,7 @@ namespace CityInfoUnitTests
             Assert.True(repo.GetCity(1, true).PointsOfInterest.Contains(poi1)); 
             Assert.True(repo.GetCity(1, true).PointsOfInterest.Contains(poi2)); 
         }
+
         [Fact]
         // No cities, thus no point of interest
         public void TestGetPointNoCities()
@@ -201,14 +154,10 @@ namespace CityInfoUnitTests
             var points = new List<PointOfInterest> { }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockSetP = new Mock<DbSet<PointOfInterest>>();
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Provider).Returns(points.Provider);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Expression).Returns(points.Expression);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(points.ElementType);
+            MockSetupPoint(mockSetP, points);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -223,38 +172,6 @@ namespace CityInfoUnitTests
         // Cities with wrong city id
         public void TestGetPointWrongCityId()
         {
-            PointOfInterest poi1 = new PointOfInterest
-            {
-                Id = 1,
-                Name = "Downtown",
-                Description = "Lots of food",
-                CityId = 1
-            };
-
-            PointOfInterest poi2 = new PointOfInterest
-            {
-                Id = 2,
-                Name = "Stanley Park",
-                Description = "Lots to do",
-                CityId = 1
-            };
-
-            PointOfInterest poi3 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "Science World",
-                Description = "Lots of science",
-                CityId = 2
-            };
-
-            PointOfInterest poi4 = new PointOfInterest
-            {
-                Id = 4,
-                Name = "UBC",
-                Description = "School",
-                CityId = 2
-            };
-
             var cities = new List<City>
             {
                 new City{ Id = 1, Name = "Richmond", Description = "Small" },
@@ -264,14 +181,10 @@ namespace CityInfoUnitTests
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockSetP = new Mock<DbSet<PointOfInterest>>();
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Provider).Returns(points.Provider);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Expression).Returns(points.Expression);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(points.ElementType);
+            MockSetupPoint(mockSetP, points);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -295,14 +208,10 @@ namespace CityInfoUnitTests
             var points = new List<PointOfInterest> { }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockSetP = new Mock<DbSet<PointOfInterest>>();
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Provider).Returns(points.Provider);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Expression).Returns(points.Expression);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(points.ElementType);
+            MockSetupPoint(mockSetP, points);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -317,38 +226,6 @@ namespace CityInfoUnitTests
         // Cities with exisiting city id, wrong poi id
         public void TestGetPointWrongId()
         {
-            PointOfInterest poi1 = new PointOfInterest
-            {
-                Id = 1,
-                Name = "Downtown",
-                Description = "Lots of food",
-                CityId = 1
-            };
-
-            PointOfInterest poi2 = new PointOfInterest
-            {
-                Id = 2,
-                Name = "Stanley Park",
-                Description = "Lots to do",
-                CityId = 1
-            };
-
-            PointOfInterest poi3 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "Science World",
-                Description = "Lots of science",
-                CityId = 2
-            };
-
-            PointOfInterest poi4 = new PointOfInterest
-            {
-                Id = 4,
-                Name = "UBC",
-                Description = "School",
-                CityId = 2
-            };
-
             var cities = new List<City>
             {
                 new City{ Id = 1, Name = "Richmond", Description = "Small" },
@@ -358,14 +235,10 @@ namespace CityInfoUnitTests
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockSetP = new Mock<DbSet<PointOfInterest>>();
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Provider).Returns(points.Provider);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Expression).Returns(points.Expression);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(points.ElementType);
+            MockSetupPoint(mockSetP, points);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -380,38 +253,6 @@ namespace CityInfoUnitTests
         // Cities with existing city id, correct poi id
         public void TestGetPoint()
         {
-            PointOfInterest poi1 = new PointOfInterest
-            {
-                Id = 1,
-                Name = "Downtown",
-                Description = "Lots of food",
-                CityId = 1
-            };
-
-            PointOfInterest poi2 = new PointOfInterest
-            {
-                Id = 2,
-                Name = "Stanley Park",
-                Description = "Lots to do",
-                CityId = 1
-            };
-
-            PointOfInterest poi3 = new PointOfInterest
-            {
-                Id = 3,
-                Name = "Science World",
-                Description = "Lots of science",
-                CityId = 2
-            };
-
-            PointOfInterest poi4 = new PointOfInterest
-            {
-                Id = 4,
-                Name = "UBC",
-                Description = "School",
-                CityId = 2
-            };
-
             var cities = new List<City>
             {
                 new City{ Id = 1, Name = "Richmond", Description = "Small" },
@@ -421,14 +262,10 @@ namespace CityInfoUnitTests
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockSetP = new Mock<DbSet<PointOfInterest>>();
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Provider).Returns(points.Provider);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.Expression).Returns(points.Expression);
-            mockSetP.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(points.ElementType);
+            MockSetupPoint(mockSetP, points);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -449,9 +286,7 @@ namespace CityInfoUnitTests
             var cities = new List<City> { }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -472,9 +307,7 @@ namespace CityInfoUnitTests
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -495,9 +328,7 @@ namespace CityInfoUnitTests
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -514,9 +345,7 @@ namespace CityInfoUnitTests
             var cities = new List<City> { }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -537,9 +366,7 @@ namespace CityInfoUnitTests
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<City>>();
-            mockSet.As<IQueryable<City>>().Setup(m => m.Provider).Returns(cities.Provider);
-            mockSet.As<IQueryable<City>>().Setup(m => m.Expression).Returns(cities.Expression);
-            mockSet.As<IQueryable<City>>().Setup(m => m.ElementType).Returns(cities.ElementType);
+            MockSetupCity(mockSet, cities);
 
             var mockContext = new Mock<CityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
@@ -555,5 +382,118 @@ namespace CityInfoUnitTests
             Assert.Equal("Vancouver", cities2.Last().Name);
             Assert.Equal("Big", cities2.Last().Description);
         }
+
+        [Fact]
+        // No cities thus no points
+        public void TestGetPointsNoCities()
+        {
+            var cities = new List<City> { }.AsQueryable();
+
+            var points = new List<PointOfInterest> { }.AsQueryable();
+
+            var mockSet = new Mock<DbSet<City>>();
+            MockSetupCity(mockSet, cities);
+
+            var mockSetP = new Mock<DbSet<PointOfInterest>>();
+            MockSetupPoint(mockSetP, points);
+
+            var mockContext = new Mock<CityInfoContext>();
+            mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
+            mockContext.Setup(m => m.PointsOfInterest).Returns(mockSetP.Object);
+
+            var repo = new CityInfoRepository(mockContext.Object);
+
+            Assert.Empty(repo.GetPointsOfInterestForCity(1));
+        }
+
+        [Fact]
+        // Cities with wrong city id
+        public void TestGetPointsWrongCityId()
+        {
+            var cities = new List<City>
+            {
+                new City{ Id = 1, Name = "Richmond", Description = "Small" },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big" }
+            }.AsQueryable();
+
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
+
+            var mockSet = new Mock<DbSet<City>>();
+            MockSetupCity(mockSet, cities);
+
+            var mockSetP = new Mock<DbSet<PointOfInterest>>();
+            MockSetupPoint(mockSetP, points);
+
+            var mockContext = new Mock<CityInfoContext>();
+            mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
+            mockContext.Setup(m => m.PointsOfInterest).Returns(mockSetP.Object);
+
+            var repo = new CityInfoRepository(mockContext.Object);
+
+            Assert.Empty(repo.GetPointsOfInterestForCity(3));
+        }
+
+        [Fact]
+        // City with no points
+        public void TestGetPointsNoPoints()
+        {
+            var cities = new List<City>
+            {
+                new City{ Id = 1, Name = "Richmond", Description = "Small" },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big" },
+                new City{ Id = 3, Name = "Burnaby", Description = "Far"}
+            }.AsQueryable();
+
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
+
+            var mockSet = new Mock<DbSet<City>>();
+            MockSetupCity(mockSet, cities);
+
+            var mockSetP = new Mock<DbSet<PointOfInterest>>();
+            MockSetupPoint(mockSetP, points);
+
+            var mockContext = new Mock<CityInfoContext>();
+            mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
+            mockContext.Setup(m => m.PointsOfInterest).Returns(mockSetP.Object);
+
+            var repo = new CityInfoRepository(mockContext.Object);
+
+            Assert.Empty(repo.GetPointsOfInterestForCity(3));
+        }
+
+        [Fact]
+        // Correct city id with points of interest
+        public void TestGetPoints()
+        {
+            var cities = new List<City>
+            {
+                new City{ Id = 1, Name = "Richmond", Description = "Small" },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big" }
+            }.AsQueryable();
+
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
+
+            var mockSet = new Mock<DbSet<City>>();
+            MockSetupCity(mockSet, cities);
+
+            var mockSetP = new Mock<DbSet<PointOfInterest>>();
+            MockSetupPoint(mockSetP, points);
+
+            var mockContext = new Mock<CityInfoContext>();
+            mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
+            mockContext.Setup(m => m.PointsOfInterest).Returns(mockSetP.Object);
+
+            var repo = new CityInfoRepository(mockContext.Object);
+
+            Assert.Equal(2, repo.GetPointsOfInterestForCity(1).Count());
+            Assert.Equal(1, repo.GetPointsOfInterestForCity(1).ElementAt(0).Id);
+            Assert.Equal("Downtown", repo.GetPointsOfInterestForCity(1).ElementAt(0).Name);
+            Assert.Equal("Lots of food", repo.GetPointsOfInterestForCity(1).ElementAt(0).Description);
+            Assert.Equal(1, repo.GetPointsOfInterestForCity(1).ElementAt(0).CityId);
+            Assert.Equal(2, repo.GetPointsOfInterestForCity(1).ElementAt(1).Id);
+            Assert.Equal("Stanley Park", repo.GetPointsOfInterestForCity(1).ElementAt(1).Name);
+            Assert.Equal("Lots to do", repo.GetPointsOfInterestForCity(1).ElementAt(1).Description);
+        }
+
     }
 }
