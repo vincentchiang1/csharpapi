@@ -1,13 +1,10 @@
 ﻿using CityInfo.API.Models;
 using Xunit;
 
-
-
 namespace CityInfoUnitTests
 {
     public class TestModels
-    {
-            
+    {            
         [Fact]
         public void TestNoPoints()
         {
@@ -24,7 +21,6 @@ namespace CityInfoUnitTests
         [Fact]
         public void TestMultiplePoints()
         {
-
             PointOfInterestDto poi1 = new PointOfInterestDto
             {
                 Id = 1,
