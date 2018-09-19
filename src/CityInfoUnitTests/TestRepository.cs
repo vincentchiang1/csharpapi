@@ -9,7 +9,7 @@ using Xunit;
 namespace CityInfoUnitTests
 {
     public class TestRepository
-    {
+    {        
         readonly PointOfInterest poi1 = new PointOfInterest
         {
             Id = 1,
@@ -54,14 +54,7 @@ namespace CityInfoUnitTests
             mock.As<IQueryable<PointOfInterest>>().Setup(m => m.Expression).Returns(points.Expression);
             mock.As<IQueryable<PointOfInterest>>().Setup(m => m.ElementType).Returns(points.ElementType);
         }
-
-        // Helper function for creating context
-        private ICityInfoContext CreateCityInfoContext(IEnumerable<City> cities, IEnumerable<PointOfInterest> points)
-        {
-            IQueryable<City> cities1 = (IQueryable<City>)cities;
-            var mockSet = new Mock<DbSet<City>>();
-            MockSetupCity(mockSet, cities1);
-        }
+           
         // Helper function for mock context set up
         private Mock<ICityInfoContext> MockSetup(IQueryable<City> cities, IQueryable<PointOfInterest> points)
         {
@@ -78,6 +71,13 @@ namespace CityInfoUnitTests
             return mockContext;
         }
 
+        // Helper function for creating context
+        private ICityInfoContext CreateCityInfoContext(IEnumerable<City> cities, IEnumerable<PointOfInterest> points)
+        {
+            var mock = MockSetup(cities.AsQueryable(), points.AsQueryable());
+            return mock.Object;
+        }
+
         [Fact]
         // No data, thus no id match
         public void TestGetCityNoCities()
@@ -86,9 +86,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Null(repo.GetCity(3, false));
         }
@@ -105,9 +105,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Null(repo.GetCity(3, false));
         }
@@ -124,9 +124,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Equal(1, repo.GetCity(1, false).Id);
             Assert.Equal("Richmond", repo.GetCity(1, false).Name);
@@ -148,9 +148,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Equal(1, repo.GetCity(1, true).Id);
             Assert.Equal("Richmond", repo.GetCity(1, true).Name);
@@ -168,9 +168,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Null(repo.GetPointOfInterestForCity(1, 1));
         }
@@ -187,9 +187,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Null(repo.GetPointOfInterestForCity(5, 1));
         }
@@ -206,9 +206,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Null(repo.GetPointOfInterestForCity(1, 1));
         }
@@ -225,9 +225,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Null(repo.GetPointOfInterestForCity(1, 3));
         }
@@ -244,9 +244,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Equal(2, repo.GetPointOfInterestForCity(1, 2).Id);
             Assert.Equal("Stanley Park", repo.GetPointOfInterestForCity(1, 2).Name);
@@ -262,9 +262,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.False(repo.CityExists(1));
         }
@@ -281,9 +281,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.False(repo.CityExists(3));
         }
@@ -300,9 +300,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.True(repo.CityExists(1));
         }
@@ -315,9 +315,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Empty(repo.GetCities());
         }
@@ -334,9 +334,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             var cities2 = repo.GetCities();
             Assert.Equal(2, cities2.Count());
@@ -356,9 +356,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Empty(repo.GetPointsOfInterestForCity(1));
         }
@@ -375,9 +375,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Empty(repo.GetPointsOfInterestForCity(3));
         }
@@ -395,9 +395,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Empty(repo.GetPointsOfInterestForCity(3));
         }
@@ -414,9 +414,9 @@ namespace CityInfoUnitTests
 
             var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
-            var mockContext = MockSetup(cities, points);
+            var mockContext = CreateCityInfoContext(cities, points);
 
-            var repo = new CityInfoRepository(mockContext.Object);
+            var repo = new CityInfoRepository(mockContext);
 
             Assert.Equal(2, repo.GetPointsOfInterestForCity(1).Count());
             Assert.Equal(1, repo.GetPointsOfInterestForCity(1).ElementAt(0).Id);
