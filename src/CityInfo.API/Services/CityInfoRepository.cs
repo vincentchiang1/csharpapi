@@ -9,8 +9,8 @@ namespace CityInfo.API.Services
 {
     public class CityInfoRepository : ICityInfoRepository
     {
-        private CityInfoContext _context;
-        public CityInfoRepository(CityInfoContext context)
+        private ICityInfoContext _context;
+        public CityInfoRepository(ICityInfoContext context)
         {
             _context = context;
         }

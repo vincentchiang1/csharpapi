@@ -55,8 +55,15 @@ namespace CityInfoUnitTests
             mock.As<IQueryable<PointOfInterest>>().Setup(m => m.ElementType).Returns(points.ElementType);
         }
 
+        // Helper function for creating context
+        private ICityInfoContext CreateCityInfoContext(IEnumerable<City> cities, IEnumerable<PointOfInterest> points)
+        {
+            IQueryable<City> cities1 = (IQueryable<City>)cities;
+            var mockSet = new Mock<DbSet<City>>();
+            MockSetupCity(mockSet, cities1);
+        }
         // Helper function for mock context set up
-        private Mock<CityInfoContext> MockSetup(IQueryable<City> cities, IQueryable<PointOfInterest> points)
+        private Mock<ICityInfoContext> MockSetup(IQueryable<City> cities, IQueryable<PointOfInterest> points)
         {
             var mockSet = new Mock<DbSet<City>>();
             MockSetupCity(mockSet, cities);
@@ -64,7 +71,7 @@ namespace CityInfoUnitTests
             var mockSetP = new Mock<DbSet<PointOfInterest>>();
             MockSetupPoint(mockSetP, points);
 
-            var mockContext = new Mock<CityInfoContext>();
+            var mockContext = new Mock<ICityInfoContext>();
             mockContext.Setup(m => m.Cities).Returns(mockSet.Object);
             mockContext.Setup(m => m.PointsOfInterest).Returns(mockSetP.Object);
 
