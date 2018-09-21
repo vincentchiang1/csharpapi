@@ -13,6 +13,7 @@ namespace CityInfo.API.Controllers
     public class CitiesController : Controller
     {
         private ICityInfoRepository _cityInfoRepository;
+        private Validator _validator;
 
         public CitiesController(ICityInfoRepository cityInfoRepository)
         {
@@ -31,13 +32,14 @@ namespace CityInfo.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCity(int id, bool includePointsOfInterest = false)
         {
+            IActionResult error = null;
             var city = _cityInfoRepository.GetCity(id, includePointsOfInterest);
 
-            if (city == null)
+            if (!_validator.ValidateGetCity(id, _cityInfoRepository, includePointsOfInterest, error))
             {
-                return NotFound();
+                return error;
             }
-
+          
             if (includePointsOfInterest)
             {
                 var cityResult = Mapper.Map<CityDto>(city); 
