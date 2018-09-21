@@ -21,6 +21,7 @@ namespace CityInfoUnitTests
         };
 
         [Fact]
+        [Trait("City", "CityDto.City")]
         // CityDto with no points of interest
         public void TestCityDtoNoPoints()
         {
@@ -38,6 +39,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("City", "CityDto.City")]
         // CityDto with multiple points of interest
         public void TestCityDtoMultiplePoints()
         {
@@ -62,6 +64,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("City", "CityDto.City")]
         // CityDto with no id, name, description, or points of interest
         public void TestCityDtoEmpty()
         {
@@ -74,6 +77,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("City", "CityWithoutPointsOfInterestDto.City")]
         // CityWithoutPointsOfInterestDto 
         public void TestCityWithoutPointsDto()
         {
@@ -90,6 +94,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("City", "CityWithoutPointsOfInterestDto.City")]
         // CityWithoutPointsOfInterestDto with no id, name, or description
         public void TestCityWIthoutPointsDtoEmpty()
         {
@@ -101,6 +106,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Point", "PointOfInterestDto.City")]
         // PointOfInterestDto
         public void TestPointDto()
         {
@@ -110,6 +116,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Point", "PointOfInterestDto.City")]
         // PointOfInterestDto with no id, name, or description
         public void TestPointDtoEmpty()
         {
@@ -121,6 +128,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Point", "PointOfInterestForCreationDto.City")]
         // PointOfInterestForCreationDto
         public void TestPointForCreation()
         {
@@ -135,6 +143,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Point", "PointOfInterestForCreationDto.City")]
         // PointOfInterestForCreationDto without Description
         public void TestPointForCreationNoDesc()
         {
@@ -148,6 +157,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Point", "PointOfInterestForUpdateDto.City")]
         // PointOfInterestForUpdateDto
         public void TestPointForUpdate()
         {
@@ -162,6 +172,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Point", "PointOfInterestForUpdateDto.City")]
         // PointOfInterestForUpdateDto without Description
         public void TestPointForUpdateNoDesc()
         {

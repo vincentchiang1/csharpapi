@@ -47,7 +47,6 @@ namespace CityInfoUnitTests
             }
         };
 
-
         [Fact]
         // City Entity to CityWithoutPointsOfInterestDto
         public void TestFromCityToCityWithoutPointsDto()
