@@ -18,12 +18,12 @@ namespace CityInfo.API.Controllers
         private ILogger<PointsOfInterestController> _logger;
         private IMailService _mailService;
         private ICityInfoRepository _cityInfoRepository;
-        private Validator _validator; 
+        private IValidator _validator; 
 
         public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
             IMailService mailService,
             ICityInfoRepository cityInfoRepository,
-            Validator validator)
+            IValidator validator)
         {
             _logger = logger;
             _mailService = mailService;

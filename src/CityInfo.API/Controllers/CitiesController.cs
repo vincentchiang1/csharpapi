@@ -13,11 +13,12 @@ namespace CityInfo.API.Controllers
     public class CitiesController : Controller
     {
         private ICityInfoRepository _cityInfoRepository;
-        private Validator _validator;
+        private IValidator _validator;
 
-        public CitiesController(ICityInfoRepository cityInfoRepository)
+        public CitiesController(ICityInfoRepository cityInfoRepository, IValidator validator)
         {
             _cityInfoRepository = cityInfoRepository;
+            _validator = validator;
         }
 
         [HttpGet()]

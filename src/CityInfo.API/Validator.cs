@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API
 {
-    public class Validator:Controller
+    public class Validator:Controller, IValidator
     {
         public bool ValidateGetPoints(int cityId, ICityInfoRepository repo)
         {
