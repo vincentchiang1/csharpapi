@@ -16,18 +16,18 @@ namespace CityInfo.API
          bool ValidateCreate(int cityId,
             PointOfInterestForCreationDto point,
             ICityInfoRepository repo,
-            IActionResult error);
+            ref IActionResult error);
          bool ValidateUpdate(int cityId,
             int id,
             PointOfInterestForUpdateDto point,
             ICityInfoRepository repo,
-            IActionResult error);
+            ref IActionResult error);
          bool ValidatePartially(int cityId,
             int id,
             JsonPatchDocument<PointOfInterestForUpdateDto> patchDoc,
             ICityInfoRepository repo,
-            IActionResult error);
-         bool ValidateDelete(int cityId, int id, ICityInfoRepository repo, IActionResult error);
+            ref IActionResult error);
+         bool ValidateDelete(int cityId, int id, ICityInfoRepository repo, ref IActionResult error);
          bool ValidateGetCity(int id, ICityInfoRepository repo, bool includePointsOfInterest, ref IActionResult error);
 
 

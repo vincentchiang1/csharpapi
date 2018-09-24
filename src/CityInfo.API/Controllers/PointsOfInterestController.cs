@@ -74,7 +74,7 @@ namespace CityInfo.API.Controllers
         {
             IActionResult error = null;
 
-            if(!_validator.ValidateCreate(cityId, pointOfInterest, _cityInfoRepository, error))
+            if(!_validator.ValidateCreate(cityId, pointOfInterest, _cityInfoRepository, ref error))
             {
                 return error;
             }
@@ -93,7 +93,7 @@ namespace CityInfo.API.Controllers
         {
             IActionResult error = null;
 
-            if (!_validator.ValidateUpdate(cityId, id, pointOfInterest, _cityInfoRepository, error))
+            if (!_validator.ValidateUpdate(cityId, id, pointOfInterest, _cityInfoRepository, ref error))
             {
                 return error;
             }
@@ -117,7 +117,7 @@ namespace CityInfo.API.Controllers
         {
             IActionResult error = null;
 
-            if(!_validator.ValidatePartially(cityId, id, patchDoc, _cityInfoRepository, error))
+            if(!_validator.ValidatePartially(cityId, id, patchDoc, _cityInfoRepository, ref error))
             {
                 return error;
             }
@@ -142,7 +142,7 @@ namespace CityInfo.API.Controllers
         {
             IActionResult error = null;
 
-            if(!_validator.ValidateDelete(cityId, id, _cityInfoRepository, error))
+            if(!_validator.ValidateDelete(cityId, id, _cityInfoRepository, ref error))
             {
                 return error;
             }

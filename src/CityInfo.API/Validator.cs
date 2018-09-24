@@ -35,7 +35,7 @@ namespace CityInfo.API
         public bool ValidateCreate(int cityId, 
             PointOfInterestForCreationDto point, 
             ICityInfoRepository repo, 
-            IActionResult error)
+            ref IActionResult error)
         {
             if(point == null)
             {
@@ -73,7 +73,7 @@ namespace CityInfo.API
             int id, 
             PointOfInterestForUpdateDto point, 
             ICityInfoRepository repo,
-            IActionResult error)
+            ref IActionResult error)
         {
             if (point == null)
             {
@@ -107,7 +107,7 @@ namespace CityInfo.API
             int id, 
             JsonPatchDocument<PointOfInterestForUpdateDto> patchDoc,
             ICityInfoRepository repo,
-            IActionResult error)
+            ref IActionResult error)
         {
             if (patchDoc == null)
             {
@@ -154,7 +154,7 @@ namespace CityInfo.API
             return true;
         }
 
-        public bool ValidateDelete(int cityId, int id, ICityInfoRepository repo, IActionResult error)
+        public bool ValidateDelete(int cityId, int id, ICityInfoRepository repo, ref IActionResult error)
         {
             if (!repo.CityExists(cityId))
             {
