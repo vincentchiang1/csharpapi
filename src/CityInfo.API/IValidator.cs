@@ -28,7 +28,7 @@ namespace CityInfo.API
             ICityInfoRepository repo,
             IActionResult error);
          bool ValidateDelete(int cityId, int id, ICityInfoRepository repo, IActionResult error);
-         bool ValidateGetCity(int id, ICityInfoRepository repo, bool includePointsOfInterest, IActionResult error);
+         bool ValidateGetCity(int id, ICityInfoRepository repo, bool includePointsOfInterest, ref IActionResult error);
 
 
     }

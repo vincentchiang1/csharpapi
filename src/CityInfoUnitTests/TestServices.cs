@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using CityInfo.API;
 using CityInfo.API.Controllers;
 using CityInfo.API.Entities;
 using CityInfo.API.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NLog;
 using Xunit;
 
 namespace CityInfoUnitTests
@@ -84,12 +82,11 @@ namespace CityInfoUnitTests
             var mockContext = CreateCityInfoContext(cities, points);
 
             ICityInfoRepository repo = new CityInfoRepository(mockContext);
-
-            ILogger<PointsOfInterestController> logger;
+            ILoggerFactory factory = new LoggerFactory();
+            ILogger<PointsOfInterestController> logger = factory.CreateLogger<PointsOfInterestController>();
             IMailService service = new LocalMailService();
-            //PointsOfInterestController controller = new PointsOfInterestController(logger, service, repo);
-
-            
+            IValidator validator = new Validator();
+            PointsOfInterestController controller = new PointsOfInterestController(logger, service, repo, validator);            
         }
     }
 }

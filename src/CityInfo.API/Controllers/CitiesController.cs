@@ -36,7 +36,7 @@ namespace CityInfo.API.Controllers
             IActionResult error = null;
             var city = _cityInfoRepository.GetCity(id, includePointsOfInterest);
 
-            if (!_validator.ValidateGetCity(id, _cityInfoRepository, includePointsOfInterest, error))
+            if (!_validator.ValidateGetCity(id, _cityInfoRepository, includePointsOfInterest, ref error))
             {
                 return error;
             }

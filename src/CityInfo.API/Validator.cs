@@ -171,7 +171,7 @@ namespace CityInfo.API
             return true;
         }
 
-        public bool ValidateGetCity(int id, ICityInfoRepository repo, bool includePointsOfInterest, IActionResult error)
+        public bool ValidateGetCity(int id, ICityInfoRepository repo, bool includePointsOfInterest, ref IActionResult error)
         {
             if(repo.GetCity(id,includePointsOfInterest) == null)
             {
