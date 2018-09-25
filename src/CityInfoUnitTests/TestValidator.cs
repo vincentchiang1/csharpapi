@@ -518,7 +518,28 @@ namespace CityInfoUnitTests
         // ValidatePartially wrong city
         public void TestValidatePartiallyWrongCity()
         {
+            var cities = new List<City>
+            {
+                new City{ Id = 1, Name = "Richmond", Description = "Small" },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big" }
+            }.AsQueryable();
 
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
+
+            var mockContext = CreateCityInfoContext(cities, points);
+
+            ICityInfoRepository repo = new CityInfoRepository(mockContext);
+
+            IValidator validator = new Validator();
+
+            IActionResult error = null;
+
+            JsonPatchDocument<PointOfInterestForUpdateDto> jsonPatchDocument = new JsonPatchDocument<PointOfInterestForUpdateDto>();
+
+            jsonPatchDocument.Replace(n=>n.Name, "Updated - Central Park");
+
+
+            Assert.False(validator.ValidatePartially(3, 1, jsonPatchDocument, repo, ref error));
         }
 
         [Fact]
@@ -526,15 +547,27 @@ namespace CityInfoUnitTests
         // ValidatePartially wrong point
         public void TestValidatePartiallyWrongPoint()
         {
+            var cities = new List<City>
+            {
+                new City{ Id = 1, Name = "Richmond", Description = "Small" },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big" }
+            }.AsQueryable();
 
-        }
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
 
-        [Fact]
-        [Trait("Category", "PointOfInterest.Validator")]
-        // ValidatePartially Model Not Valid
-        public void TestValidatePartiallyInvalidModel()
-        {
+            var mockContext = CreateCityInfoContext(cities, points);
 
+            ICityInfoRepository repo = new CityInfoRepository(mockContext);
+
+            IValidator validator = new Validator();
+
+            IActionResult error = null;
+
+            JsonPatchDocument<PointOfInterestForUpdateDto> jsonPatchDocument = new JsonPatchDocument<PointOfInterestForUpdateDto>();
+
+            jsonPatchDocument.Replace(n => n.Name, "Updated - Central Park");
+
+            Assert.False(validator.ValidatePartially(1, 9, jsonPatchDocument, repo, ref error));
         }
 
         [Fact]
@@ -542,7 +575,27 @@ namespace CityInfoUnitTests
         // ValidatePartially name = desc
         public void TestValidatePartiallyNameDesc()
         {
+            var cities = new List<City>
+            {
+                new City{ Id = 1, Name = "Richmond", Description = "Small" },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big" }
+            }.AsQueryable();
 
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
+
+            var mockContext = CreateCityInfoContext(cities, points);
+
+            ICityInfoRepository repo = new CityInfoRepository(mockContext);
+
+            IValidator validator = new Validator();
+
+            IActionResult error = null;
+
+            JsonPatchDocument<PointOfInterestForUpdateDto> jsonPatchDocument = new JsonPatchDocument<PointOfInterestForUpdateDto>();
+
+            jsonPatchDocument.Replace(n => n.Name, "Lots to do");
+
+            Assert.False(validator.ValidatePartially(1, 2, jsonPatchDocument, repo, ref error));
         }
 
         [Fact]
@@ -550,7 +603,27 @@ namespace CityInfoUnitTests
         // ValidatePartially
         public void TestValidatePartially()
         {
+            var cities = new List<City>
+            {
+                new City{ Id = 1, Name = "Richmond", Description = "Small" },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big" }
+            }.AsQueryable();
 
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
+
+            var mockContext = CreateCityInfoContext(cities, points);
+
+            ICityInfoRepository repo = new CityInfoRepository(mockContext);
+
+            IValidator validator = new Validator();
+
+            IActionResult error = null;
+
+            JsonPatchDocument<PointOfInterestForUpdateDto> jsonPatchDocument = new JsonPatchDocument<PointOfInterestForUpdateDto>();
+
+            jsonPatchDocument.Replace(n => n.Name, "x");
+
+            Assert.True(validator.ValidatePartially(1, 2, jsonPatchDocument, repo, ref error));
         }
 
         [Fact]

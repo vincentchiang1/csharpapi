@@ -68,6 +68,7 @@ namespace CityInfoUnitTests
 
         
         [Fact]
+        [Trait("Category", "Services")]
         // LocalMailService Test
         public void TestLocalMailService()
         {
@@ -84,7 +85,7 @@ namespace CityInfoUnitTests
             ICityInfoRepository repo = new CityInfoRepository(mockContext);
             ILoggerFactory factory = new LoggerFactory();
             ILogger<PointsOfInterestController> logger = factory.CreateLogger<PointsOfInterestController>();
-            IMailService service = new LocalMailService();
+            IMailService service = new LocalMailService("a", "b");
             IValidator validator = new Validator();
             PointsOfInterestController controller = new PointsOfInterestController(logger, service, repo, validator);            
         }

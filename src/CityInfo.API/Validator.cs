@@ -138,7 +138,7 @@ namespace CityInfo.API
                 ModelState.AddModelError("Description", "The provided description should be different from the name.");
             }
 
-            TryValidateModel(pointOfInterestToPatch);
+            //TryValidateModel(pointOfInterestToPatch);
 
             if (!ModelState.IsValid)
             {

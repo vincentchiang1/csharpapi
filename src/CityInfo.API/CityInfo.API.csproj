@@ -15,4 +15,10 @@
     <PackageReference Include="AutoMapper" Version="7.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="patch.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
