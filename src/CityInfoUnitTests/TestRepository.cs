@@ -64,7 +64,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetCity", "Repository.City")]
+        [Trait("Category", "Repository.City")]
         // No data, thus no id match
         public void TestGetCityNoCities()
         {
@@ -76,7 +76,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetCity", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Data, no id match
         public void TestGetCityWrongId()
         {
@@ -96,7 +96,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetCity", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Data with POI(include = false)
         public void TestGetCityIncludeFalse()
         {
@@ -121,7 +121,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetCity", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Data with POI (include = true)
         public void TestGetCityIncludeTrue()
         {
@@ -146,7 +146,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoint", "Repository.City")]
+        [Trait("Category", "Repository")]
         // No cities, thus no point of interest
         public void TestGetPointNoCities()
         {
@@ -162,7 +162,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoint", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Cities with wrong city id
         public void TestGetPointWrongCityId()
         {
@@ -182,7 +182,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoint", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Cities with existing city id, no points of interest
         public void TestGetPointNoPoints()
         {
@@ -202,7 +202,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoint", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Cities with exisiting city id, wrong poi id
         public void TestGetPointWrongId()
         {
@@ -222,7 +222,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoint", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Cities with existing city id, correct poi id
         public void TestGetPoint()
         {
@@ -245,7 +245,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("CityExists", "Repository.City")]
+        [Trait("Category", "Repository")]
         // No cities thus does not exist
         public void TestCityExistsNoCities()
         {
@@ -261,7 +261,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("CityExists", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Cities with wrong id thus does not exist
         public void TestCityExistsWrongId()
         {
@@ -281,7 +281,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("CityExists", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Cities with correct id thus does exist
         public void TestCityExists()
         {
@@ -301,7 +301,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetCities", "Repository.City")]
+        [Trait("Category", "Repository")]
         // No cities thus empty list
         public void TestGetCitiesNoCities()
         {
@@ -317,7 +317,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetCities", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Cities exist thus list of cities
         public void TestGetCities()
         {
@@ -344,7 +344,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoints", "Repository.City")]
+        [Trait("Category", "Repository")]
         // No cities thus no points
         public void TestGetPointsNoCities()
         {
@@ -360,7 +360,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoints", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Cities with wrong city id
         public void TestGetPointsWrongCityId()
         {
@@ -380,7 +380,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoints", "Repository.City")]
+        [Trait("Category", "Repository")]
         // City with no points
         public void TestGetPointsNoPoints()
         {
@@ -401,7 +401,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
-        [Trait("GetPoints", "Repository.City")]
+        [Trait("Category", "Repository")]
         // Correct city id with points of interest
         public void TestGetPoints()
         {

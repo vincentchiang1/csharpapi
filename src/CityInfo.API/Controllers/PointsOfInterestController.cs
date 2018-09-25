@@ -1,14 +1,12 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using AutoMapper;
 using CityInfo.API.Entities;
 using CityInfo.API.Models;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CityInfo.API.Controllers
 {
@@ -38,7 +36,8 @@ namespace CityInfo.API.Controllers
             {
                 if (!_validator.ValidateGetPoints(cityId, _cityInfoRepository))
                 {
-                    _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest.");
+                    _logger.LogInformation("City with id {cityId} wasn't found when accessing points of interest.", cityId);
+
                     return NotFound();
                 }
 
@@ -51,6 +50,7 @@ namespace CityInfo.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogCritical($"Exception while getting points of interest for city with id {cityId}.", ex);
+
                 return StatusCode(500, "A problem happened while handling your request.");
             }
         }

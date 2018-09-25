@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CityInfo.API.Entities;
+using CityInfo.API.Models;
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
-using CityInfo.API.Services;
-using Microsoft.Extensions.Configuration;
-using CityInfo.API.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.API
 {
@@ -82,15 +77,7 @@ namespace CityInfo.API
 
             app.UseStatusCodePages();
 
-            AutoMapper.Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<Entities.City, Models.CityWithoutPointsOfInterestDto>();
-                cfg.CreateMap<Entities.City, Models.CityDto>();
-                cfg.CreateMap<Entities.PointOfInterest, Models.PointOfInterestDto>();
-                cfg.CreateMap<Models.PointOfInterestForCreationDto, Entities.PointOfInterest>();
-                cfg.CreateMap<Models.PointOfInterestForUpdateDto, Entities.PointOfInterest>();
-                cfg.CreateMap<Entities.PointOfInterest, Models.PointOfInterestForUpdateDto>();
-            });
+            InitializeMapper();
 
             app.UseMvc();
 
@@ -103,6 +90,19 @@ namespace CityInfo.API
             //{
             //    await context.Response.WriteAsync("Hello World!");
             //});
+        }
+
+        public void InitializeMapper()
+        {
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<City, CityWithoutPointsOfInterestDto>();
+                cfg.CreateMap<City, CityDto>();
+                cfg.CreateMap<PointOfInterest, PointOfInterestDto>();
+                cfg.CreateMap<PointOfInterestForCreationDto, PointOfInterest>();
+                cfg.CreateMap<PointOfInterestForUpdateDto, PointOfInterest>();
+                cfg.CreateMap<PointOfInterest, PointOfInterestForUpdateDto>();
+            });
         }
     }
 }

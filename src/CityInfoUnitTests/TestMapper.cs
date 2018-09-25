@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using CityInfo.API;
 using CityInfo.API.Entities;
 using CityInfo.API.Models;
 using Xunit;
@@ -11,16 +12,9 @@ namespace CityInfoUnitTests
     {
         public TestMapper()
         {
+            Startup s = new Startup(null);
             Mapper.Reset();
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<CityInfo.API.Entities.City, CityInfo.API.Models.CityWithoutPointsOfInterestDto>();
-                cfg.CreateMap<CityInfo.API.Entities.City, CityInfo.API.Models.CityDto>();
-                cfg.CreateMap<CityInfo.API.Entities.PointOfInterest, CityInfo.API.Models.PointOfInterestDto>();
-                cfg.CreateMap<CityInfo.API.Models.PointOfInterestForCreationDto, CityInfo.API.Entities.PointOfInterest>();
-                cfg.CreateMap<CityInfo.API.Models.PointOfInterestForUpdateDto, CityInfo.API.Entities.PointOfInterest>();
-                cfg.CreateMap<CityInfo.API.Entities.PointOfInterest, CityInfo.API.Models.PointOfInterestForUpdateDto>();
-            });
+            s.InitializeMapper();                        
         }
 
         readonly City city = new City
@@ -48,6 +42,7 @@ namespace CityInfoUnitTests
         };
 
         [Fact]
+        [Trait("Category", "Mapper")]
         // City Entity to CityWithoutPointsOfInterestDto
         public void TestFromCityToCityWithoutPointsDto()
         {    
@@ -59,6 +54,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "Mapper")]
         // City Entity to CityDto
         public void TestFromCityToCityDto()
         {
@@ -77,6 +73,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "Mapper")]
         // Point Entity to PointDto
         public void TestFromPointToPointDto()
         {
@@ -87,6 +84,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "Mapper")]
         // PointForCreationDto to Point Entity
         public void TestFromPointForCreationDtoToPoint()
         {
@@ -103,6 +101,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "Mapper")]
         // PointForUpdateDto to Point Entity
         public void TestFromPointForUpdateDtoToPoint()
         {
@@ -119,6 +118,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "Mapper")]
         // Point Entity to PointForUpdateDto
         public void TestFromPointToPointForUpdate()
         {

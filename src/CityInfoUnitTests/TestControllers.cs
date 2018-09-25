@@ -4,9 +4,11 @@ using AutoMapper;
 using CityInfo.API;
 using CityInfo.API.Controllers;
 using CityInfo.API.Entities;
+using CityInfo.API.Models;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -19,12 +21,12 @@ namespace CityInfoUnitTests
             Mapper.Reset();
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<CityInfo.API.Entities.City, CityInfo.API.Models.CityWithoutPointsOfInterestDto>();
-                cfg.CreateMap<CityInfo.API.Entities.City, CityInfo.API.Models.CityDto>();
-                cfg.CreateMap<CityInfo.API.Entities.PointOfInterest, CityInfo.API.Models.PointOfInterestDto>();
-                cfg.CreateMap<CityInfo.API.Models.PointOfInterestForCreationDto, CityInfo.API.Entities.PointOfInterest>();
-                cfg.CreateMap<CityInfo.API.Models.PointOfInterestForUpdateDto, CityInfo.API.Entities.PointOfInterest>();
-                cfg.CreateMap<CityInfo.API.Entities.PointOfInterest, CityInfo.API.Models.PointOfInterestForUpdateDto>();
+                cfg.CreateMap<City, CityWithoutPointsOfInterestDto>();
+                cfg.CreateMap<City, CityDto>();
+                cfg.CreateMap<PointOfInterest, PointOfInterestDto>();
+                cfg.CreateMap<PointOfInterestForCreationDto, PointOfInterest>();
+                cfg.CreateMap<PointOfInterestForUpdateDto, PointOfInterest>();
+                cfg.CreateMap<PointOfInterest, PointOfInterestForUpdateDto>();
             });
         }
 
@@ -82,6 +84,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "City.Controllers")]
         // CitiesController GetCities when empty
         public void TestCitiesControlGetCitiesEmpty()
         {
@@ -107,6 +110,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "City.Controllers")]
         // CitiesController GetCities non-empty
         public void TestCitiesControlGetCities()
         {
@@ -136,6 +140,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "City.Controllers")]
         // CitiesController GetCity empty
         public void TestCitiesControlGetCityEmpty()
         {
@@ -161,6 +166,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "City.Controllers")]
         // CitiesController GetCity wrong id
         public void TestCitiesControlGetCityWrongId()
         {
@@ -190,6 +196,7 @@ namespace CityInfoUnitTests
         }
 
         [Fact]
+        [Trait("Category", "City.Controllers")]
         // CitiesController GetCity
         public void TestCitiesControlGetCity()
         {
@@ -216,6 +223,38 @@ namespace CityInfoUnitTests
             // Assert
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
+        }
+
+        [Fact]
+        [Trait("Category", "PointOfInterest.Controllers")]
+        // Points Controller GetPoints Wrong id
+        public void TestPointsControlWrongId()
+        {
+            // Arrange
+            var cities = new List<City>
+            {
+                new City{ Id = 1, Name = "Richmond", Description = "Small" },
+                new City{ Id = 2, Name = "Vancouver", Description = "Big" }
+            }.AsQueryable();
+
+            var points = new List<PointOfInterest> { poi1, poi2, poi3, poi4 }.AsQueryable();
+
+            var mockContext = CreateCityInfoContext(cities, points);
+
+            ICityInfoRepository repo = new CityInfoRepository(mockContext);
+            ILoggerFactory factory = new LoggerFactory();
+            ILogger<PointsOfInterestController> logger = factory.CreateLogger<PointsOfInterestController>();
+            IMailService service = new LocalMailService();
+            IValidator validator = new Validator();
+            PointsOfInterestController controller = new PointsOfInterestController(logger, service, repo, validator);
+
+            // Act
+            var result = controller.GetPointsOfInterest(3);
+            var notFoundResult = result as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(notFoundResult);
+            Assert.Equal(404, notFoundResult.StatusCode);
         }
     }
 }

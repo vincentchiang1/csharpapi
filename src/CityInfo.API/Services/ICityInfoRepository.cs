@@ -1,8 +1,5 @@
-﻿using CityInfo.API.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using CityInfo.API.Entities;
 
 namespace CityInfo.API.Services
 {
